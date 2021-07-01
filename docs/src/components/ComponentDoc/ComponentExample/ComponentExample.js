@@ -1,4 +1,4 @@
-import cx from 'classnames'
+import cx from 'clsx'
 import copyToClipboard from 'copy-to-clipboard'
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
@@ -28,23 +28,6 @@ const componentControlsStyle = {
  * Allows toggling the raw `code` code block.
  */
 class ComponentExample extends Component {
-  static propTypes = {
-    children: PropTypes.node,
-    description: PropTypes.node,
-    examplePath: PropTypes.string.isRequired,
-    history: PropTypes.object.isRequired,
-    location: PropTypes.object.isRequired,
-    onVisibilityChange: PropTypes.func.isRequired,
-    renderHtml: PropTypes.bool,
-    sourceCode: PropTypes.string.isRequired,
-    suiVersion: PropTypes.string,
-    title: PropTypes.node,
-  }
-
-  static defaultProps = {
-    renderHtml: true,
-  }
-
   constructor(props) {
     super(props)
 
@@ -195,6 +178,23 @@ class ComponentExample extends Component {
       </InView>
     )
   }
+}
+
+ComponentExample.propTypes = {
+  children: PropTypes.node,
+  description: PropTypes.node,
+  examplePath: PropTypes.string.isRequired,
+  history: PropTypes.object.isRequired,
+  location: PropTypes.object.isRequired,
+  onVisibilityChange: PropTypes.func.isRequired,
+  renderHtml: PropTypes.bool,
+  sourceCode: PropTypes.string.isRequired,
+  suiVersion: PropTypes.string,
+  title: PropTypes.node,
+}
+
+ComponentExample.defaultProps = {
+  renderHtml: true,
 }
 
 /* TODO: Replace this temporary component with hooks */

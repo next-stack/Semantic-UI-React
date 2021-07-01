@@ -1,4 +1,4 @@
-import cx from 'classnames'
+import cx from 'clsx'
 import _ from 'lodash'
 import PropTypes from 'prop-types'
 import { cloneElement, Component } from 'react'
@@ -30,84 +30,7 @@ const TRANSITION_STYLE_TYPE = {
  * A transition is an animation usually used to move content in or out of view.
  */
 export default class Transition extends Component {
-  static propTypes = {
-    /** Named animation event to used. Must be defined in CSS. */
-    animation: PropTypes.oneOfType([PropTypes.oneOf(SUI.TRANSITIONS), PropTypes.string]),
-
-    /** Primary content. */
-    children: PropTypes.element.isRequired,
-
-    /** Whether it is directional animation event or not. Use it only for custom transitions. */
-    directional: PropTypes.bool,
-
-    /** Duration of the CSS transition animation in milliseconds. */
-    duration: PropTypes.oneOfType([
-      PropTypes.number,
-      PropTypes.shape({
-        hide: PropTypes.number,
-        show: PropTypes.number,
-      }),
-      PropTypes.string,
-    ]),
-
-    /** Show the component; triggers the enter or exit animation. */
-    visible: PropTypes.bool,
-
-    /** Wait until the first "enter" transition to mount the component (add it to the DOM). */
-    mountOnShow: PropTypes.bool,
-
-    /**
-     * Callback on each transition that changes visibility to shown.
-     *
-     * @param {null}
-     * @param {object} data - All props with status.
-     */
-    onComplete: PropTypes.func,
-
-    /**
-     * Callback on each transition that changes visibility to hidden.
-     *
-     * @param {null}
-     * @param {object} data - All props with status.
-     */
-    onHide: PropTypes.func,
-
-    /**
-     * Callback on each transition that changes visibility to shown.
-     *
-     * @param {null}
-     * @param {object} data - All props with status.
-     */
-    onShow: PropTypes.func,
-
-    /**
-     * Callback on animation start.
-     *
-     * @param {null}
-     * @param {object} data - All props with status.
-     */
-    onStart: PropTypes.func,
-
-    /** React's key of the element. */
-    reactKey: PropTypes.string,
-
-    /** Run the enter animation when the component mounts, if it is initially shown. */
-    transitionOnMount: PropTypes.bool,
-
-    /** Unmount the component (remove it from the DOM) when it is not shown. */
-    unmountOnHide: PropTypes.bool,
-  }
-
-  static defaultProps = {
-    animation: 'fade',
-    duration: 500,
-    visible: true,
-    mountOnShow: true,
-    transitionOnMount: false,
-    unmountOnHide: false,
-  }
-
-  /** @deprecated Static properties will be removed in v1 */
+  /** @deprecated Static properties will be removed in v2. */
   static INITIAL = TRANSITION_STATUS_INITIAL
   static ENTERED = TRANSITION_STATUS_ENTERED
   static ENTERING = TRANSITION_STATUS_ENTERING
@@ -164,16 +87,17 @@ export default class Transition extends Component {
     const durationType = TRANSITION_CALLBACK_TYPE[nextStatus]
     const durationValue = normalizeTransitionDuration(duration, durationType)
 
-    clearTimeout(this.timeoutId)
-    this.timeoutId = setTimeout(
-      () => this.setState((state) => ({ status: state.nextStatus })),
-      durationValue,
-    )
+    this.timeoutId = setTimeout(() => this.setState({ status: nextStatus }), durationValue)
   }
 
   updateStatus = (prevState) => {
-    if (this.state.status !== this.state.nextStatus && this.state.nextStatus) {
-      this.handleStart(this.state.nextStatus)
+    if (prevState.status !== this.state.status) {
+      // Timeout should be cleared in any case as previous can lead set to unexpected `nextStatus`
+      clearTimeout(this.timeoutId)
+
+      if (this.state.nextStatus) {
+        this.handleStart(this.state.nextStatus)
+      }
     }
 
     if (!prevState.animating && this.state.animating) {
@@ -248,4 +172,81 @@ export default class Transition extends Component {
       style: this.computeStyle(),
     })
   }
+}
+
+Transition.propTypes = {
+  /** Named animation event to used. Must be defined in CSS. */
+  animation: PropTypes.oneOfType([PropTypes.oneOf(SUI.TRANSITIONS), PropTypes.string]),
+
+  /** Primary content. */
+  children: PropTypes.element.isRequired,
+
+  /** Whether it is directional animation event or not. Use it only for custom transitions. */
+  directional: PropTypes.bool,
+
+  /** Duration of the CSS transition animation in milliseconds. */
+  duration: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.shape({
+      hide: PropTypes.number,
+      show: PropTypes.number,
+    }),
+    PropTypes.string,
+  ]),
+
+  /** Show the component; triggers the enter or exit animation. */
+  visible: PropTypes.bool,
+
+  /** Wait until the first "enter" transition to mount the component (add it to the DOM). */
+  mountOnShow: PropTypes.bool,
+
+  /**
+   * Callback on each transition that changes visibility to shown.
+   *
+   * @param {null}
+   * @param {object} data - All props with status.
+   */
+  onComplete: PropTypes.func,
+
+  /**
+   * Callback on each transition that changes visibility to hidden.
+   *
+   * @param {null}
+   * @param {object} data - All props with status.
+   */
+  onHide: PropTypes.func,
+
+  /**
+   * Callback on each transition that changes visibility to shown.
+   *
+   * @param {null}
+   * @param {object} data - All props with status.
+   */
+  onShow: PropTypes.func,
+
+  /**
+   * Callback on animation start.
+   *
+   * @param {null}
+   * @param {object} data - All props with status.
+   */
+  onStart: PropTypes.func,
+
+  /** React's key of the element. */
+  reactKey: PropTypes.string,
+
+  /** Run the enter animation when the component mounts, if it is initially shown. */
+  transitionOnMount: PropTypes.bool,
+
+  /** Unmount the component (remove it from the DOM) when it is not shown. */
+  unmountOnHide: PropTypes.bool,
+}
+
+Transition.defaultProps = {
+  animation: 'fade',
+  duration: 500,
+  visible: true,
+  mountOnShow: true,
+  transitionOnMount: false,
+  unmountOnHide: false,
 }

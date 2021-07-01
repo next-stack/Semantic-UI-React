@@ -1,5 +1,142 @@
 # Change Log
 
+## v2.0.3 (2021-01-20)
+
+#### :bug: Bug Fix
+* [#4145](https://github.com/Semantic-Org/Semantic-UI-React/pull/4145) fix(Sidebar): fix a collision between `children` and shorthand props ([@layershifter](https://github.com/layershifter))
+* [#4112](https://github.com/Semantic-Org/Semantic-UI-React/pull/4112) fix(Feed|CardGroup|ItemGroup|Search): change key checks from falsy to nullish semantics ([@noinkling](https://github.com/noinkling))
+* [#4144](https://github.com/Semantic-Org/Semantic-UI-React/pull/4144) fix(Sidebar): fix issue with Portals in React 17 ([@layershifter](https://github.com/layershifter))
+
+## v2.0.2 (2021-01-13)
+
+#### :bug: Bug Fix
+* [#4116](https://github.com/Semantic-Org/Semantic-UI-React/pull/4116) fix(Image): pass `loading` attribute to an `img` element ([@noinkling](https://github.com/noinkling))
+
+#### :memo: Documentation
+* [#4097](https://github.com/Semantic-Org/Semantic-UI-React/pull/4097) docs(Table): fix sort issue in TableExampleSortable ([@Mental1993](https://github.com/Mental1993))
+
+#### :house: Internal
+* [#4138](https://github.com/Semantic-Org/Semantic-UI-React/pull/4138) chore: bump dependencies to allow React 17 in peerDependencies ([@layershifter](https://github.com/layershifter))
+* [#4031](https://github.com/Semantic-Org/Semantic-UI-React/pull/4031) chore: support React 17 ([@layershifter](https://github.com/layershifter))
+
+#### Committers: 3
+- Malcolm ([@noinkling](https://github.com/noinkling))
+- Oleksandr Fediashov ([@layershifter](https://github.com/layershifter))
+- Pechlivanis Dimitrios ([@Mental1993](https://github.com/Mental1993))
+
+## [v2.0.1](https://github.com/Semantic-Org/Semantic-UI-React/tree/v2.0.1) (2020-10-26)
+
+#### :bug: Bug Fix
+* [#4094](https://github.com/Semantic-Org/Semantic-UI-React/pull/4094)  fix(Popup): transfer zIndex & fix floated elements ([@layershifter](https://github.com/layershifter))
+
+#### :house: Internal
+* [#4093](https://github.com/Semantic-Org/Semantic-UI-React/pull/4093) chore: add visual tests ([@layershifter](https://github.com/layershifter))
+
+## [v2.0.0](https://github.com/Semantic-Org/Semantic-UI-React/tree/v2.0.0) (2020-10-02)
+
+#### :boom: Breaking Change
+* [#4075](https://github.com/Semantic-Org/Semantic-UI-React/pull/4075) chore: remove MountNode component ([@layershifter](https://github.com/layershifter))
+* [#4074](https://github.com/Semantic-Org/Semantic-UI-React/pull/4074) chore: remove Responsive component ([@layershifter](https://github.com/layershifter))
+* [#3947](https://github.com/Semantic-Org/Semantic-UI-React/pull/3947) chore: update `react-popper` to v2 ([@ayasakov](https://github.com/ayasakov))
+* [#4030](https://github.com/Semantic-Org/Semantic-UI-React/pull/4030) fix(Modal|Portal|Popup): use proposed value for `open` in `onOpen` & `onClose` callbacks ([@layershifter](https://github.com/layershifter))
+
+#### :memo: Documentation
+* [#4076](https://github.com/Semantic-Org/Semantic-UI-React/pull/4076) docs: add migration guide to v2 ([@layershifter](https://github.com/layershifter))
+
+## [v1.3.1](https://github.com/Semantic-Org/Semantic-UI-React/tree/v1.3.1) (2020-09-28)
+
+#### :bug: Bug Fix
+* [#4079](https://github.com/Semantic-Org/Semantic-UI-React/pull/4079) fix(TextArea): update onChange type ([@foooomio](https://github.com/foooomio))
+
+#### :house: Internal
+* [#4072](https://github.com/Semantic-Org/Semantic-UI-React/pull/4072) chore: use lodash-es to improve bundle size ([@layershifter](https://github.com/layershifter))
+* [#4073](https://github.com/Semantic-Org/Semantic-UI-React/pull/4073) chore: remove usages of `lodash/fp` in customPropTypes ([@layershifter](https://github.com/layershifter))
+* [#4068](https://github.com/Semantic-Org/Semantic-UI-React/pull/4068) chore: bump update a package with `Ref` component ([@layershifter](https://github.com/layershifter))
+
+## [v1.3.0](https://github.com/Semantic-Org/Semantic-UI-React/tree/v1.3.0) (2020-09-23)
+
+#### :rocket: New Feature
+* [#4029](https://github.com/Semantic-Org/Semantic-UI-React/pull/4029) feat: introduce `children` function to shorthands ([@layershifter](https://github.com/layershifter))
+
+#### :bug: Bug Fix
+* [#4060](https://github.com/Semantic-Org/Semantic-UI-React/pull/4060) fix(Transition): schedule changes only on `status` change ([@layershifter](https://github.com/layershifter))
+* [#4047](https://github.com/Semantic-Org/Semantic-UI-React/pull/4047) fix(Dropdown): handle `text` as a content in `renderLabel` ([@layershifter](https://github.com/layershifter))
+
+## [v1.2.1](https://github.com/Semantic-Org/Semantic-UI-React/tree/v1.2.1) (2020-08-19)
+
+#### :bug: Bug Fix
+* [#4037](https://github.com/Semantic-Org/Semantic-UI-React/pull/4037) fix(Pagination): set a default activePage in Pagination's state ([@gcalica](https://github.com/gcalica))
+* [#4041](https://github.com/Semantic-Org/Semantic-UI-React/pull/4041) fix(Dropdown): fix handling of "Space" key  ([@layershifter](https://github.com/layershifter))
+* [#4043](https://github.com/Semantic-Org/Semantic-UI-React/pull/4043) fix(FormField): fix aria-invalid on error false ([@aoelen](https://github.com/aoelen))
+
+#### :memo: Documentation
+* [#4040](https://github.com/Semantic-Org/Semantic-UI-React/pull/4040) docs(Placeholder): fix description of the component ([@eugenelim](https://github.com/eugenelim))
+* [#4039](https://github.com/Semantic-Org/Semantic-UI-React/pull/4039) docs(Ref): restore docs for a component ([@layershifter](https://github.com/layershifter))
+
+#### :house: Internal
+* [#4023](https://github.com/Semantic-Org/Semantic-UI-React/pull/4023) chore: update Ref dependency to latest version ([@jluxenberg](https://github.com/jluxenberg))
+
+## [v1.2.0](https://github.com/Semantic-Org/Semantic-UI-React/tree/v1.2.0) (2020-08-12)
+
+#### :rocket: New Feature
+* [#1739](https://github.com/Semantic-Org/Semantic-UI-React/pull/1739) feat(Modal): impliment Dimmer shorthand ([@qoalu](https://github.com/qoalu))
+
+#### :bug: Bug Fix
+* [#4026](https://github.com/Semantic-Org/Semantic-UI-React/pull/4026) fix(Popup): do not throw if `context` & `trigger` are missing ([@layershifter](https://github.com/layershifter))
+* [#4018](https://github.com/Semantic-Org/Semantic-UI-React/pull/4018) fix(Dropdown): update typings for `defaultValue` & `value` ([@zhongeric](https://github.com/zhongeric))
+* [#4019](https://github.com/Semantic-Org/Semantic-UI-React/pull/4019) fix(Popup|Visibility): update types definitions for props ([@daigof](https://github.com/daigof))
+
+#### :memo: Documentation
+* [#3794](https://github.com/Semantic-Org/Semantic-UI-React/pull/3794) docs(SearchExampleStandard): use React hooks ([@rpatelcode](https://github.com/rpatelcode))
+* [#3795](https://github.com/Semantic-Org/Semantic-UI-React/pull/3795) docs(SearchExampleStandardCustom): use React hooks ([@rpatelcode](https://github.com/rpatelcode))
+
+#### :house: Internal
+* [#4027](https://github.com/Semantic-Org/Semantic-UI-React/pull/4027) chore(MountNode): deprecate component ([@layershifter](https://github.com/layershifter))
+
+## [v1.1.1](https://github.com/Semantic-Org/Semantic-UI-React/tree/v1.1.1) (2020-08-03)
+
+#### :bug: Bug Fix
+* [#4014](https://github.com/Semantic-Org/Semantic-UI-React/pull/4014) fix(Dropdown): update search prop typing ([@charliematters](https://github.com/charliematters))
+
+#### :memo: Documentation
+* [#4012](https://github.com/Semantic-Org/Semantic-UI-React/pull/4012) docs(Modal): improve examples, use React hooks ([@layershifter](https://github.com/layershifter))
+
+#### :house: Internal
+* [#4011](https://github.com/Semantic-Org/Semantic-UI-React/pull/4011) chore: improve bundle size ([@layershifter](https://github.com/layershifter))
+
+## [v1.1.0](https://github.com/Semantic-Org/Semantic-UI-React/tree/v1.1.0) (2020-07-30)
+
+#### :rocket: New Feature
+* [#4003](https://github.com/Semantic-Org/Semantic-UI-React/pull/4003) feat(Dropdown): add support for images, icons and flags in selected values ([@layershifter](https://github.com/layershifter))
+* [#3996](https://github.com/Semantic-Org/Semantic-UI-React/pull/3996) feat(Flag): include "england" as a valid value ([@layershifter](https://github.com/layershifter))
+
+#### :bug: Bug Fix
+* [#4006](https://github.com/Semantic-Org/Semantic-UI-React/pull/4006) fix(Dropdown): compute proper `selectedIndex` in `multiple` ([@layershifter](https://github.com/layershifter))
+* [#4004](https://github.com/Semantic-Org/Semantic-UI-React/pull/4004) fix(Dropdown): handle keyboard events for arrows, space and enter keys locally ([@layershifter](https://github.com/layershifter))
+* [#3938](https://github.com/Semantic-Org/Semantic-UI-React/pull/3938) fix(Search): fix an error when `showNoResults=false` and arrow down is pressed ([@ysugimoto](https://github.com/ysugimoto))
+* [#3785](https://github.com/Semantic-Org/Semantic-UI-React/pull/3785) fix(Search): merge nested shorthand props for the <input> element ([@noinkling](https://github.com/noinkling))
+* [#3998](https://github.com/Semantic-Org/Semantic-UI-React/pull/3998) fix(Portal): throw an error if React.Fragment passed as `trigger` ([@layershifter](https://github.com/layershifter))
+* [#3995](https://github.com/Semantic-Org/Semantic-UI-React/pull/3995) fix(Accordion): update typings to include `AccordionPanel` on static props ([@layershifter](https://github.com/layershifter))
+* [#3901](https://github.com/Semantic-Org/Semantic-UI-React/pull/3901) fix(FormFiled): pass `id` when contains child elements or has `content` prop ([@srotbart](https://github.com/srotbart))
+
+#### :memo: Documentation
+* [#4010](https://github.com/Semantic-Org/Semantic-UI-React/pull/4010) docs: improve CodeSandbox integration ([@layershifter](https://github.com/layershifter))
+* [#4008](https://github.com/Semantic-Org/Semantic-UI-React/pull/4008) docs(Responsive): deprecate component ([@layershifter](https://github.com/layershifter))
+* [#3957](https://github.com/Semantic-Org/Semantic-UI-React/pull/3957) docs(Tab): add note that `grid` prop only applies to vertical menu ([@swrobel](https://github.com/swrobel))
+* [#3964](https://github.com/Semantic-Org/Semantic-UI-React/pull/3964) docs(TableExampleSortable): your description ([@evcodes](https://github.com/evcodes))
+* [#3713](https://github.com/Semantic-Org/Semantic-UI-React/pull/3713) docs: make get started instructions around themes more clear ([@justsml](https://github.com/justsml))
+* [#3898](https://github.com/Semantic-Org/Semantic-UI-React/pull/3898) docs(README): correct webpack example link ([@snitin315](https://github.com/snitin315))
+* [#3997](https://github.com/Semantic-Org/Semantic-UI-React/pull/3997) docs(SidebarExampleTransitions): fix look of the example ([@layershifter](https://github.com/layershifter))
+* [#3881](https://github.com/Semantic-Org/Semantic-UI-React/pull/3881) docs(LabelExampleImageColored): update example to match image names ([@isnifer](https://github.com/isnifer))
+
+#### :house: Internal
+* [#4009](https://github.com/Semantic-Org/Semantic-UI-React/pull/4009) docs: fix IE11 issues ([@layershifter](https://github.com/layershifter))
+* [#4001](https://github.com/Semantic-Org/Semantic-UI-React/pull/4001) chore:bump dependencies, minor fixes ([@layershifter](https://github.com/layershifter))
+* [#4000](https://github.com/Semantic-Org/Semantic-UI-React/pull/4000) chore:bump dependencies ([@layershifter](https://github.com/layershifter))
+* [#3999](https://github.com/Semantic-Org/Semantic-UI-React/pull/3999) chore:add bundle size metrics ([@layershifter](https://github.com/layershifter))
+* [#3993](https://github.com/Semantic-Org/Semantic-UI-React/pull/3993) chore:use CircleCI workflows ([@layershifter](https://github.com/layershifter))
+* [#3992](https://github.com/Semantic-Org/Semantic-UI-React/pull/3992) chore:add github action to check PR labels ([@layershifter](https://github.com/layershifter))
+
 ## [v1.0.0](https://github.com/Semantic-Org/Semantic-UI-React/tree/v1.0.0) (2020-07-21)
 
 [Full Changelog](https://github.com/Semantic-Org/Semantic-UI-React/compare/v0.88.2...v1.0.0)

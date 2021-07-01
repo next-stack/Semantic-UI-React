@@ -6,12 +6,14 @@ import ModalHeader from 'src/modules/Modal/ModalHeader'
 import ModalContent from 'src/modules/Modal/ModalContent'
 import ModalActions from 'src/modules/Modal/ModalActions'
 import ModalDescription from 'src/modules/Modal/ModalDescription'
+import ModalDimmer from 'src/modules/Modal/ModalDimmer'
 import Portal from 'src/addons/Portal/Portal'
 
 import {
   assertNodeContains,
   assertBodyClasses,
   assertBodyContains,
+  assertWithTimeout,
   domEvent,
   sandbox,
 } from 'test/utils'
@@ -27,6 +29,16 @@ let wrapper
 // wrap the render methods to update a global wrapper that is unmounted after each test
 const wrapperMount = (...args) => (wrapper = mount(...args))
 const wrapperShallow = (...args) => (wrapper = shallow(...args))
+
+// cleanup in `useEffect()` is executed async, so we need to perform a proper cleanup first to avoid
+// collisions with other tests
+function waitForClassesCleanup(done, customAssertions = () => {}) {
+  wrapper.unmount()
+  assertWithTimeout(() => {
+    assertBodyClasses('dimmed', false)
+    customAssertions()
+  }, done)
+}
 
 describe('Modal', () => {
   beforeEach(() => {
@@ -46,7 +58,13 @@ describe('Modal', () => {
   })
 
   common.isConformant(Modal, { rendersPortal: true })
-  common.hasSubcomponents(Modal, [ModalHeader, ModalContent, ModalActions, ModalDescription])
+  common.hasSubcomponents(Modal, [
+    ModalHeader,
+    ModalContent,
+    ModalActions,
+    ModalDescription,
+    ModalDimmer,
+  ])
   common.hasValidTypings(Modal)
 
   common.implementsShorthandProp(Modal, {
@@ -228,163 +246,180 @@ describe('Modal', () => {
   })
 
   describe('dimmer', () => {
-    describe('defaults', () => {
-      it('is set to true by default', () => {
-        Modal.defaultProps.dimmer.should.equal(true)
-      })
+    it('adds a "dimmer" className to the body', (done) => {
+      wrapperMount(<Modal open />)
 
-      it('is present by default', () => {
-        wrapperMount(<Modal open />)
-        assertBodyContains('.ui.dimmer')
-      })
+      assertBodyContains('.ui.page.modals.dimmer.transition.visible.active')
+      waitForClassesCleanup(done)
     })
 
-    describe('true', () => {
-      it('adds/removes body classes "dimmable dimmed" on mount/unmount', () => {
+    describe('can be "true"', () => {
+      it('adds/removes body classes "dimmable dimmed" on mount/unmount', (done) => {
         assertBodyClasses('dimmable dimmed', false)
 
         wrapperMount(<Modal open dimmer />)
         assertBodyClasses('dimmable dimmed')
 
-        wrapper.unmount()
+        wrapper.setProps({ open: false })
         assertBodyClasses('dimmable dimmed', false)
-      })
 
-      it('adds a dimmer to the body', () => {
-        wrapperMount(<Modal open dimmer />)
-        assertBodyContains('.ui.page.modals.dimmer.transition.visible.active')
+        waitForClassesCleanup(done)
       })
     })
 
     describe('blurring', () => {
-      it('adds/removes body classes "dimmable dimmed blurring" on mount/unmount', () => {
+      it('adds/removes body classes "dimmable dimmed blurring" on mount/unmount', (done) => {
         assertBodyClasses('dimmable dimmed blurring', false)
 
         wrapperMount(<Modal open dimmer='blurring' />)
         assertBodyClasses('dimmable dimmed blurring')
 
-        wrapper.unmount()
+        wrapper.setProps({ open: false })
         assertBodyClasses('dimmable dimmed blurring', false)
+
+        waitForClassesCleanup(done)
       })
 
-      it('adds a dimmer to the body', () => {
+      it('adds a dimmer to the body', (done) => {
         wrapperMount(<Modal open dimmer='blurring' />)
+
         assertBodyContains('.ui.page.modals.dimmer.transition.visible.active')
+        waitForClassesCleanup(done)
       })
     })
 
     describe('inverted', () => {
-      it('adds/removes body classes "dimmable dimmed" on mount/unmount', () => {
+      it('adds/removes body classes "dimmable dimmed" on mount/unmount', (done) => {
         assertBodyClasses('dimmable dimmed', false)
 
         wrapperMount(<Modal open dimmer />)
         assertBodyClasses('dimmable dimmed')
 
-        wrapper.unmount()
+        wrapper.setProps({ open: false })
         assertBodyClasses('dimmable dimmed', false)
+
+        waitForClassesCleanup(done)
       })
 
-      it('adds an inverted dimmer to the body', () => {
+      it('adds an inverted dimmer to the body', (done) => {
         wrapperMount(<Modal open dimmer='inverted' />)
+
         assertBodyContains('.ui.inverted.page.modals.dimmer.transition.visible.active')
+        waitForClassesCleanup(done)
+      })
+    })
+
+    describe('object', () => {
+      it('passes props to a dimmer element', () => {
+        wrapperMount(<Modal open dimmer={{ className: 'bar', id: 'dimmer', inverted: true }} />)
+
+        wrapper.find('ModalDimmer').should.have.prop('inverted', true)
+        wrapper.find('.dimmer').should.have.className('bar')
+        wrapper.find('.dimmer').should.have.prop('id', 'dimmer')
       })
     })
   })
 
   describe('onOpen', () => {
     it('is called on trigger click', () => {
-      const spy = sandbox.spy()
-      wrapperMount(<Modal onOpen={spy} trigger={<div id='trigger' />} />)
+      const onOpen = sandbox.spy()
+      wrapperMount(<Modal onOpen={onOpen} trigger={<div id='trigger' />} />)
 
       wrapper.find('#trigger').simulate('click')
-      spy.should.have.been.calledOnce()
+      onOpen.should.have.been.calledOnce()
+      onOpen.should.have.been.calledWithMatch({}, { open: true })
     })
 
     it('is not called on body click', () => {
-      const spy = sandbox.spy()
-      wrapperMount(<Modal onOpen={spy} />)
+      const onOpen = sandbox.spy()
+      wrapperMount(<Modal onOpen={onOpen} />)
 
       domEvent.click(document.body)
-      spy.should.not.have.been.called()
+      onOpen.should.not.have.been.called()
     })
   })
 
   describe('onClose', () => {
-    let spy
-
-    beforeEach(() => {
-      spy = sandbox.spy()
-    })
-
     it('is called on dimmer click', () => {
-      wrapperMount(<Modal onClose={spy} defaultOpen />)
+      const onClose = sandbox.spy()
+      wrapperMount(<Modal onClose={onClose} defaultOpen />)
 
       domEvent.click('.ui.dimmer')
-      spy.should.have.been.calledOnce()
+      onClose.should.have.been.calledOnce()
+      onClose.should.have.been.calledWithMatch({}, { open: false })
     })
 
     it('is called on click outside of the modal', () => {
-      wrapperMount(<Modal onClose={spy} defaultOpen />)
+      const onClose = sandbox.spy()
+      wrapperMount(<Modal onClose={onClose} defaultOpen />)
 
       domEvent.click(document.querySelector('.ui.modal').parentNode)
-      spy.should.have.been.calledOnce()
+      onClose.should.have.been.calledOnce()
     })
 
     it('is not called on mousedown inside and mouseup outside of the modal', () => {
-      wrapperMount(<Modal onClose={spy} defaultOpen />)
+      const onClose = sandbox.spy()
+      wrapperMount(<Modal onClose={onClose} defaultOpen />)
 
       domEvent.mouseDown(document.querySelector('.ui.modal'))
       domEvent.click(document.querySelector('.ui.modal').parentNode)
-      spy.should.not.have.been.called()
+      onClose.should.not.have.been.called()
     })
 
     it('is not called on click inside of the modal', () => {
-      wrapperMount(<Modal onClose={spy} defaultOpen />)
+      const onClose = sandbox.spy()
+      wrapperMount(<Modal onClose={onClose} defaultOpen />)
 
       domEvent.click(document.querySelector('.ui.modal'))
-      spy.should.not.have.been.called()
+      onClose.should.not.have.been.called()
     })
 
     it('is not called on body click', () => {
-      wrapperMount(<Modal onClose={spy} defaultOpen />)
+      const onClose = sandbox.spy()
+      wrapperMount(<Modal onClose={onClose} defaultOpen />)
 
       domEvent.click(document.body)
-      spy.should.not.have.been.calledOnce()
+      onClose.should.not.have.been.calledOnce()
     })
 
     it('is called when pressing escape', () => {
-      wrapperMount(<Modal onClose={spy} defaultOpen />)
+      const onClose = sandbox.spy()
+      wrapperMount(<Modal onClose={onClose} defaultOpen />)
 
       domEvent.keyDown(document, { key: 'Escape' })
-      spy.should.have.been.calledOnce()
+      onClose.should.have.been.calledOnce()
     })
 
     it('is not called when the open prop changes to false', () => {
-      wrapperMount(<Modal onClose={spy} defaultOpen />)
+      const onClose = sandbox.spy()
+      wrapperMount(<Modal onClose={onClose} defaultOpen />)
 
       wrapper.setProps({ open: false })
-      spy.should.not.have.been.called()
+      onClose.should.not.have.been.called()
     })
 
     it('is not called when open changes to false programmatically', () => {
-      wrapperMount(<Modal onClose={spy} defaultOpen />)
+      const onClose = sandbox.spy()
+      wrapperMount(<Modal onClose={onClose} defaultOpen />)
 
       wrapper.setProps({ open: false })
-      spy.should.not.have.been.called()
+      onClose.should.not.have.been.called()
     })
 
     it('is not called on dimmer click when closeOnDimmerClick is false', () => {
-      wrapperMount(<Modal onClose={spy} defaultOpen closeOnDimmerClick={false} />)
+      const onClose = sandbox.spy()
+      wrapperMount(<Modal onClose={onClose} defaultOpen closeOnDimmerClick={false} />)
 
       domEvent.click('.ui.dimmer')
-      spy.should.not.have.been.called()
+      onClose.should.not.have.been.called()
     })
 
     it('is not called on body click when closeOnDocumentClick is false', () => {
-      wrapperMount(<Modal onClose={spy} defaultOpen closeOnDocumentClick={false} />)
+      const onClose = sandbox.spy()
+      wrapperMount(<Modal onClose={onClose} defaultOpen closeOnDocumentClick={false} />)
 
       domEvent.click(document.body)
-      spy.should.not.have.been.called()
+      onClose.should.not.have.been.called()
     })
   })
 
@@ -496,9 +531,11 @@ describe('Modal', () => {
       window.innerHeight = innerHeight
     })
 
-    it('does not add the scrolling class to the body by default', () => {
+    it('does not add the scrolling class to the body by default', (done) => {
       wrapperMount(<Modal open />)
+
       assertBodyClasses('scrolling', false)
+      waitForClassesCleanup(done)
     })
 
     it('does not add the scrolling class to the body when equal to the window height', (done) => {
@@ -532,15 +569,16 @@ describe('Modal', () => {
       wrapperMount(<Modal open>foo</Modal>)
       window.innerHeight = 10
 
-      requestAnimationFrame(() => {
-        assertBodyClasses('scrolling')
-        window.innerHeight = 10000
-
-        requestAnimationFrame(() => {
-          assertBodyClasses('scrolling', false)
-          done()
-        })
-      })
+      assertWithTimeout(
+        () => {
+          assertBodyClasses('scrolling')
+          window.innerHeight = 10000
+        },
+        () =>
+          assertWithTimeout(() => {
+            assertBodyClasses('scrolling', false)
+          }, done),
+      )
     })
 
     it('adds the scrolling class to the body after re-open', (done) => {
@@ -549,18 +587,23 @@ describe('Modal', () => {
       window.innerHeight = 10
       wrapperMount(<Modal defaultOpen>foo</Modal>)
 
-      requestAnimationFrame(() => {
-        assertBodyClasses('scrolling')
-        domEvent.click('.ui.dimmer')
-
-        assertBodyClasses('scrolling', false)
-
-        wrapper.setProps({ open: true })
-        requestAnimationFrame(() => {
+      assertWithTimeout(
+        () => {
           assertBodyClasses('scrolling')
-          done()
-        })
-      })
+          domEvent.click('.ui.dimmer')
+        },
+        () =>
+          assertWithTimeout(
+            () => {
+              assertBodyClasses('scrolling', false)
+              wrapper.setProps({ open: true })
+            },
+            () =>
+              assertWithTimeout(() => {
+                assertBodyClasses('scrolling')
+              }, done),
+          ),
+      )
     })
 
     it('removes the scrolling class from the body on unmount', (done) => {
@@ -569,12 +612,8 @@ describe('Modal', () => {
       window.innerHeight = 10
       wrapperMount(<Modal open>foo</Modal>)
 
-      requestAnimationFrame(() => {
-        assertBodyClasses('scrolling')
-        wrapper.unmount()
-
+      waitForClassesCleanup(done, () => {
         assertBodyClasses('scrolling', false)
-        done()
       })
     })
   })

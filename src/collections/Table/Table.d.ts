@@ -12,7 +12,7 @@ import TableCell from './TableCell'
 import TableFooter from './TableFooter'
 import TableHeader from './TableHeader'
 import TableHeaderCell from './TableHeaderCell'
-import { default as TableRow, TableRowProps } from './TableRow'
+import TableRow, { TableRowProps } from './TableRow'
 
 export interface TableProps extends StrictTableProps {
   [key: string]: any
@@ -28,7 +28,7 @@ export interface StrictTableProps {
   /** A table can reduce its complexity to increase readability. */
   basic?: boolean | 'very'
 
-  /** A table may be divided each row into separate cells. */
+  /** A table may be divided into individual cells. */
   celled?: boolean | 'internally'
 
   /** Primary content. */

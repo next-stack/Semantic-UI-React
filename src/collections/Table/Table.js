@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import cx from 'classnames'
+import cx from 'clsx'
 import PropTypes from 'prop-types'
 import React from 'react'
 
@@ -129,7 +129,7 @@ Table.propTypes = {
   /** A table can reduce its complexity to increase readability. */
   basic: PropTypes.oneOfType([PropTypes.oneOf(['very']), PropTypes.bool]),
 
-  /** A table may be divided each row into separate cells. */
+  /** A table may be divided into individual cells. */
   celled: PropTypes.bool,
 
   /** Primary content. */

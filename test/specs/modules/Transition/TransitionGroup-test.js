@@ -12,6 +12,7 @@ const wrapperShallow = (...args) => (wrapper = shallow(...args))
 describe('TransitionGroup', () => {
   common.isConformant(TransitionGroup, {
     rendersFragmentByDefault: true,
+    rendersChildren: false,
   })
 
   beforeEach(() => {
@@ -75,14 +76,8 @@ describe('TransitionGroup', () => {
       wrapper.setProps({ children: [<div key='first' />, '', <div key='second' />] })
 
       wrapper.children().should.have.length(2)
-      wrapper
-        .childAt(0)
-        .key()
-        .should.equal('.$first')
-      wrapper
-        .childAt(1)
-        .key()
-        .should.equal('.$second')
+      wrapper.childAt(0).key().should.equal('.$first')
+      wrapper.childAt(1).key().should.equal('.$second')
     })
 
     it('sets visible to false when child was removed', () => {
@@ -95,15 +90,9 @@ describe('TransitionGroup', () => {
       wrapper.setProps({ children: [<div key='first' />] })
 
       wrapper.children().should.have.length(2)
-      wrapper
-        .childAt(0)
-        .type()
-        .should.equal(Transition)
+      wrapper.childAt(0).type().should.equal(Transition)
       wrapper.childAt(0).should.have.prop('visible', true)
-      wrapper
-        .childAt(1)
-        .type()
-        .should.equal(Transition)
+      wrapper.childAt(1).type().should.equal(Transition)
       wrapper.childAt(1).should.have.prop('visible', false)
     })
 
@@ -120,10 +109,7 @@ describe('TransitionGroup', () => {
         wrapper.update()
 
         wrapper.children().should.have.length(1)
-        wrapper
-          .childAt(0)
-          .key()
-          .should.equal('.$first')
+        wrapper.childAt(0).key().should.equal('.$first')
 
         done()
       }, 0)
